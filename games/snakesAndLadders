@@ -1,0 +1,100 @@
+from random import randint
+from time import sleep
+def player_roll(user_pos):
+    roll = randint(1,8)
+    user_pos += roll
+    print("you rolled a ",roll,"!!!")
+    if user_pos > 100:
+        print("oomf. you rolled a %d you its more than hundred so you gotta try again ;^(")
+    return user_pos
+def cpu_roll(user_pos):
+    roll = randint(1,8)
+    user_pos += roll
+    print("your opponent rolled a ", roll)
+    if user_pos > 100:
+        print("your opponent rolled a ", roll,". It was more than hundred")
+        user_pos -= roll
+    return user_pos
+def SnakeCheck(dict, arr, user_pos):
+    for i in arr:
+        if user_pos == i:
+            print("oh no! a snake ate you ;^(")
+            i = str(i)
+            user_pos = dict[i]
+    return user_pos
+def ladderCheck(dict, arr, user_pos):
+    for i in arr:
+        if user_pos == i:
+            print("hey!!! you climbed a ladder! :^D")
+            i = str(i)
+            user_pos = dict[i]
+    return user_pos
+def cpu_snakeCheck(dict, arr, user_pos):
+    for i in arr:
+        if user_pos == i:
+            print("a snake ate your opponent")
+            i = str(i)
+            user_pos = dict[i]
+    return user_pos
+def cpu_ladderCheck(dict, arr, user_pos):
+    for i in arr:
+        if user_pos == i:
+            print("your opponent climbed a ladder")
+            i = str(i)
+            user_pos = dict[i]
+    return user_pos
+
+
+ladders = [2, 4, 9, 33, 52, 80]
+ladders_routes = {"2":38, "4":14, "9":31, "33":85, "52":88, "80":99}
+ladder_sizes = {"ladder at '2'":"large", "ladder at '4'":"meduim", "ladder at 9":"large", "ladder at '33'":"XL", "ladder"
+                " at '52'":"large", "ladder at ''80":"small"}
+snakes_sizes = {"snake at '98'": "XL", "snake at '92'": "large", "snake at '62'": "small", "snake at '56'": "large",
+                "snake at '51'": "meduim"}
+snakes_routes = {"98":8, "92":53, "62":57, "56":15, "51":11}
+snakes = [98, 92, 62, 56, 51,]
+p_position = 1
+cpu_position = 1
+checker = True
+theWinnerIs = 0
+while checker:
+    print("press R to roll")
+    print("press I for stats")
+    choice = input()
+    if choice == "r" or choice == "R":
+        p_position = player_roll(p_position)
+        p_position = SnakeCheck(snakes_routes, snakes, p_position)
+        p_position = ladderCheck(ladders_routes, ladders, p_position)
+        sleep(1)
+        print("opponent is rolling")
+        sleep(randint(1,2))
+        cpu_position = cpu_roll(cpu_position)
+        cpu_position = cpu_snakeCheck(snakes_routes, snakes, cpu_position)
+        cpu_position = cpu_ladderCheck(ladders_routes, ladders, cpu_position)
+        sleep(1)
+        if p_position == 100:
+            checker = False
+            theWinnerIs = 1
+        if cpu_position == 100:
+            checker = False
+            theWinnerIs = 2
+    if choice == "i" or choice == "I":
+        print("getting stats")
+        sleep(randint(1, 2))
+        print("your position:\n", p_position,"\nyour opponents position:\n", cpu_position,"\n snakes are at:\n",snakes,
+              "\nladders are at:\n", ladders)
+        sleep(2)
+        wutNow = input("press e to exit stats press a for advanced stats")
+        if wutNow == 'e' or wutNow == "E":
+            sleep(1)
+        elif wutNow == 'a' or wutNow == "A":
+            sleep(1)
+            print("your position:\n", p_position, "\nyour opponents position:\n", cpu_position, "\n snakes are at and go to:\n",
+                  snakes_routes,"\n snake sizes:\n",snakes_sizes, "\n ladders are at and go to:\n", ladders_routes,
+                  "\n ladder sizes:\n", ladder_sizes)
+if theWinnerIs == 1:
+    print("Yay!!! you won!!!!!")
+if theWinnerIs == 2:
+    print("oh nooo... you lost ;^(")
+
+
